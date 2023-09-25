@@ -1,8 +1,8 @@
 ---
 title: "BSMM-lab-2"
 subtitle: "BSMM 8740 Fall 2023"
-author: "Add your name here"
-date: "Add the date here"
+author: "Meghana Ghanta"
+date: "25 September2023 "
 format: html
 editor: visual
 self-contained: true
@@ -11,6 +11,29 @@ self-contained: true
 ## Setup
 
 Load packages and data:
+
+```{r}
+install.packages("tidyverse")
+```
+
+```{r}
+install.packages("tidymodels")
+```
+
+```{r}
+install.packages("gt")
+install.packages("gtExtras")
+install.packages("DataExplorer")
+```
+
+```{r}
+library(magrittr)     # the pipe
+library(tidyverse)    # for data wrangling + visualization
+library(tidymodels)   # for modeling
+library(gt)           # for making display tables
+library(gtExtras)     # helper functions for beautiful tables
+library(DataExplorer) #
+```
 
 ```{r load-pkg-data}
 #| message: false
@@ -22,13 +45,54 @@ the_tate_artists <- readr::read_csv("data/the-tate-artists.csv")
 
 ### Exercise 1
 
-The `the_tate` dataset has \_\_\_ unique artists who worked from \_\_\_ to \_\_\_. The works were acquired between the years \_\_\_ and \_\_\_.
+```{r}
+#dplyr::summarize(the_tate)
+dplyr::glimpse(the_tate)
+```
+
+```{r}
+dplyr::glimpse(the_tate)
+
+```
+
+```{r}
+dplyr::glimpse(the_tate_artists)
+```
+
+```{r}
+#uniqueartists <- the_tate_artists |>
+dplyr::distinct(the_tate_artists)
+#uniqueartists
+```
+
+```{r}
+max(the_tate_artists$yearOfBirth, na.rm = T)
+min(the_tate_artists$yearOfDeath, na.rm=T)
+```
+
+```{r}
+max(the_tate$acquisitionYear, na.rm=T)
+min(the_tate$acquisitionYear, na.rm=T)
+```
+
+The `the_tate` dataset has 3532 unique artists who worked from 1543 to 2004. The works were acquired between the years 1823 and 2013.
 
 ### Exercise 2
 
-How number of works with missing dates is \_\_.
+```{r}
+missingdata <-
+  dplyr::filter(the_tate, is.na(the_tate$acquisitionYear))
+distinct()
+```
 
-The number of artists whose works have missing dates is \_\_.
+```{r}
+missingdata1 <-
+  dplyr::filter(the_tate, is.na)
+```
+
+How number of works with missing dates is .
+
+The number of artists whose works have missing dates is 45 .
 
 It would require resolving missing year data for only \_\_ artists resolve resolve at least 50% of the missing data.
 
