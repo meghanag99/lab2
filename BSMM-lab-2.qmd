@@ -131,10 +131,18 @@ The artist with the greatest number of works in the Tate collection represent 56
 ### Exercise 5
 
 ```{r}
+tate_artist_title <- the_tate |>
+  dplyr::select(artist, title)
+tate_artist_title
 
+tate_artist_title_distinct <- distinct(tate_artist_title)
+tate_artist_title_distinct
+
+num_of_duplicates <- count(tate_artist_title)-count(tate_artist_title_distinct)
+num_of_duplicates
 ```
 
-There are \_\_ duplicate artist-title pairs
+There are 23705 duplicate artist-title pairs
 
 ### Exercise 6
 
