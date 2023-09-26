@@ -80,19 +80,23 @@ The `the_tate` dataset has 3532 unique artists who worked from 1543 to 2004. The
 ### Exercise 2
 
 ```{r}
-missingdata <-
-  dplyr::filter(the_tate, is.na(the_tate$acquisitionYear))
-distinct()
+missing_dates<-
+  dplyr::filter(the_tate, is.na(the_tate$year))
+missing_dates
+test1 <- missing_dates |>
+  dplyr::distinct(missing_dates$artist)
+test1
 ```
 
 ```{r}
-missingdata1 <-
-  dplyr::filter(the_tate, is.na)
+missing_dates_count <- the_tate |>
+  group_by(artist) |>
+  summarize(missing_dates = sum(is.na(date)))
 ```
 
-How number of works with missing dates is .
+How number of works with missing dates is 5397
 
-The number of artists whose works have missing dates is 45 .
+The number of artists whose works have missing dates is 461 .
 
 It would require resolving missing year data for only \_\_ artists resolve resolve at least 50% of the missing data.
 
@@ -100,15 +104,35 @@ The missing year data likely to be classified as \_\_\_\_.
 
 ### Exercise 3
 
-The artist with the most works in the Tate collection is \_\_\_.
+```{r}
+artist_work_counts <- the_tate |>
+  group_by(artist) |>
+  summarize(titles = n()) |>
+  arrange(desc(titles))
+artist_work_counts
+tenth_artist <- 
+  artist_work_counts$artist[10]
+tenth_artist
+```
 
-The artist with the tenth-most works in the Tate collection is \_\_\_.
+The artist with the most works in the Tate collection is Turner, Joseph Mallord William
+
+The artist with the tenth-most works in the Tate collection is Warhol, Andy.
 
 ### Exercise 4
 
-The artist with the greatest number of works in the Tate collection represent \_\_\_% of the total number of works
+```{r}
+percentage_count <- (artist_work_counts$titles[1]/sum(artist_work_counts$titles))*100
+percentage_count
+```
+
+The artist with the greatest number of works in the Tate collection represent 56.9197% of the total number of works
 
 ### Exercise 5
+
+```{r}
+
+```
 
 There are \_\_ duplicate artist-title pairs
 
