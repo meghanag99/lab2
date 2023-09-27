@@ -147,20 +147,55 @@ There are 23705 duplicate artist-title pairs
 ### Exercise 6
 
 ```{r}
-the_tate <- the_tate |>
-  dplyr::mutate(areacm = width*height)
-the_tate
+install.packages("tidyr")
+library(tidyr)
 ```
 
-The artist with the largest work in the tate collection is \_\_\_
+```{r}
+the_tate <- the_tate |>
+  dplyr::mutate(areacm = (width*height)/100)
 
-The artist with the smallest work in the collection is \_\_\_. The smallest work has area \_\_\_ $\text{cm}^2$
+```
+
+```{r}
+area_tate <- the_tate|>
+  dplyr::select(artist, title, areacm)
+area_tate <- na.omit(area_tate)
+
+desc_area_tate <- area_tate |>
+  dplyr::arrange(desc(areacm))
+
+largest_work <- desc_area_tate |>
+  dplyr::slice_head(n=1)
+smallest_work <- desc_area_tate |>
+  dplyr::slice_tail(n=1)
+largest_work
+smallest_work
+
+```
+
+The artist with the largest work in the tate collection is Therrien, Robert
+
+The artist with the smallest work in the collection is Mesens, E.L . The smallest work has area 2.37 $\text{cm}^2$
 
 ### Exercise 7
 
-...
+```{r}
+the_tate_join <- the_tate|>
+  dplyr::left_join(the_tate_artists, by=c("artist" = "name"))
+the_tate_join1 <-the_tate_join|>
+  dplyr::filter(!is.na(gender))
+the_tate_group <- the_tate_join1 |>
+  dplyr::group_by(gender)
+the_tate_group
+
+```
 
 ### Exercise 8
+
+```{r}
+
+```
 
 The annual return in the SPX price in 2020 was \_\_\_%.
 
