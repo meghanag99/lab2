@@ -61,7 +61,9 @@ dplyr::glimpse(the_tate_artists)
 
 ```{r}
 #uniqueartists <- the_tate_artists |>
-dplyr::distinct(the_tate_artists)
+artists<- the_tate |>
+  dplyr::select(artist)  
+dplyr::distinct(artists)
 #uniqueartists
 ```
 
@@ -75,7 +77,17 @@ max(the_tate$acquisitionYear, na.rm=T)
 min(the_tate$acquisitionYear, na.rm=T)
 ```
 
-The `the_tate` dataset has 3532 unique artists who worked from 1543 to 2004. The works were acquired between the years 1823 and 2013.
+```{r}
+DataExplorer::introduce(the_tate)
+DataExplorer::introduce(the_tate_artists)
+```
+
+```{r}
+DataExplorer::plot_missing(the_tate)
+DataExplorer::plot_missing(the_tate_artists)
+```
+
+The `the_tate` dataset has 3336 unique artists who worked from 1543 to 2004. The works were acquired between the years 1823 and 2013.
 
 ### Exercise 2
 
@@ -194,6 +206,28 @@ the_tate_group
 ### Exercise 8
 
 ```{r}
+SPX_Data <- read.csv("data/SPX_HistoricalData_1692322132002.csv")
+```
+
+```{r}
+dplyr::glimpse(SPX_Data)
+
+```
+
+```{r}
+SPX_Data <- SPX_Data |>
+  dplyr::mutate(year=format(as.Date(SPX_Data$Date, format="%m/%d/%Y"),"%Y"))
+
+SPX_Data <- SPX_Data |>
+  dplyr::rename(cl="Close.Last")
+
+SPX_Data <- SPX_Data %>%
+  dplyr::mutate(rd = log(lead(cl) / cl))
+
+SPX_Data <- SPX_Data |>
+  dplyr::mutate(daily_return_rd=log((cl)/(cl)))
+SPX_Data <- SPX_Data |>
+  dplyr::mutate(varience=daily_return_rd^2)
 
 ```
 
