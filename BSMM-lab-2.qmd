@@ -146,6 +146,12 @@ There are 23705 duplicate artist-title pairs
 
 ### Exercise 6
 
+```{r}
+the_tate <- the_tate |>
+  dplyr::mutate(areacm = width*height)
+the_tate
+```
+
 The artist with the largest work in the tate collection is \_\_\_
 
 The artist with the smallest work in the collection is \_\_\_. The smallest work has area \_\_\_ $\text{cm}^2$
