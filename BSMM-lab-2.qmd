@@ -13,11 +13,10 @@ self-contained: true
 Load packages and data:
 
 ```{r}
-install.packages("tidyverse")
-install.packages("tidymodels")
-install.packages("gt")
-install.packages("gtExtras")
-install.packages("DataExplorer")
+#install.packages("tidymodels")
+#install.packages("gt")
+#install.packages("gtExtras")
+#install.packages("DataExplorer")
 ```
 
 ```         
@@ -222,34 +221,52 @@ the_tate_group
 ### Exercise 8
 
 ```{r}
-SPX_Data1 <- read.csv("data/SPX_HistoricalData_1692322132002.csv")
+SPXData <- read.csv("data/SPX_HistoricalData_1692322132002.csv")
+View(dataofstock)
 ```
 
 ```{r}
-dplyr::glimpse(SPX_Data1)
+SPXData <- SPXData |>
+  dplyr::mutate(year=format(as.Date(SPXData$Date, format="%m/%d/%Y"),"%Y"))
 
-```
+SPXData <- SPXData |>
+  dplyr::rename("cl"='Close.Last')
 
-```{r}
-SPX_Data1 <- SPX_Data1 |>
-  dplyr::mutate(year=format(as.Date(SPX_Data$Date, format="%m/%d/%Y"),"%Y"))
+SPXData <- SPXData |>
+  dplyr::mutate(rd = log(dplyr::lead(cl)/cl))
 
-#SPX_Data1 <- SPX_Data1 |>
-  #dplyr::rename("cl"='Close.Last')
-
-SPX_Data1 <- SPX_Data1 |>
-  dplyr::mutate(rd = log(lead(cl)/cl))
-
-SPX_Data1 <- SPX_Data1 |>
+SPXData <- SPXData |>
   dplyr::mutate(varience=rd^2)
 ```
 
-The annual return in the SPX price in 2020 was \_\_\_%.
+```{r}
+summarydata <- SPXData |>
+  dplyr::group_by(year) |>
+  dplyr::summarize(
+    Annual_Return = (exp(sum(rd, na.rm = TRUE)) - 1)*100,
+    Annual_StdDev = sqrt(sum(varience, na.rm = TRUE))*100,
+    .groups = "drop"  
+  )
 
-The corresponding price volatility was \_\_\_%.
+
+summarydata
+
+```
+
+```         
+```
+
+The annual return in the SPX price in 2020 was -13.9%.
+
+The corresponding price volatility was 34.7%.
 
 ### Exercise 9
 
-The period volatility was \_\_\_.\_%
+```{r}
+period_volatility <- sd(summarydata$Annual_Return)
+period_volatility
+```
+
+The period volatility was 19.52%
 
 ### 
