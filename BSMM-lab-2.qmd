@@ -20,10 +20,10 @@ install.packages("gtExtras")
 install.packages("DataExplorer")
 ```
 
-```{}
+```         
 ```
 
-```{}
+```         
 ```
 
 ```{r}
@@ -94,8 +94,10 @@ The `the_tate` dataset has 3336 unique artists who worked from 1543 to 2004. The
 ```{r}
 missing_dates<-
   dplyr::filter(the_tate, is.na(the_tate$year))
+  nrow(missing_dates)
 missing_dates
-count_missdates <- nrow(missing_dates)
+count_missdates <- sum(is.na(the_tate$year))
+count_missdates
 test1 <- missing_dates |>
   dplyr::distinct(missing_dates$artist)
   nrow(test1)
@@ -108,10 +110,12 @@ missing_year_count <- the_tate|>
 missing_year_count <- missing_year_count |>
   group_by(artist) |>
   summarise(missing_years = sum(is.na(year))) |>
-  arrange(desc(missing_years)) |>
-  as_tibble()
+  arrange(desc(missing_years))
 missing_year_count <- missing_year_count |>
-  mutate(percentage = (missing_years / test1) * 100)
+  mutate(percentage = (missing_years / count_missdates) * 100) |>
+  mutate(cumulative_percentage = cumsum(percentage))
+artists_50percent <- min(which (missing_year_count$cumulative_percentage >= 50))
+artists_50percent
 ```
 
 ```{r}
@@ -122,7 +126,7 @@ How number of works with missing dates is 5397
 
 The number of artists whose works have missing dates is 461 .
 
-It would require resolving missing year data for only \_\_ artists resolve resolve at least 50% of the missing data.
+It would require resolving missing year data for only 11 artists resolve resolve at least 50% of the missing data.
 
 The missing year data likely to be classified as MAR.
 
@@ -230,11 +234,11 @@ dplyr::glimpse(SPX_Data)
 SPX_Data <- SPX_Data |>
   dplyr::mutate(year=format(as.Date(SPX_Data$Date, format="%m/%d/%Y"),"%Y"))
 
-SPX_Data <- SPX_Data |>
-  dplyr::rename(cl="Close.Last")
+#SPX_Data <- SPX_Data |>
+  #dplyr::rename(cl="Close.Last")
 
 SPX_Data <- SPX_Data %>%
-  dplyr::mutate(rd = log((cl) / lag(cl)))
+  dplyr::mutate(rd = log(lead(cl) /(cl)))
 
 
 SPX_Data <- SPX_Data |>
