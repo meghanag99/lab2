@@ -14,16 +14,16 @@ Load packages and data:
 
 ```{r}
 install.packages("tidyverse")
-```
-
-```{r}
 install.packages("tidymodels")
-```
-
-```{r}
 install.packages("gt")
 install.packages("gtExtras")
 install.packages("DataExplorer")
+```
+
+```{}
+```
+
+```{}
 ```
 
 ```{r}
@@ -98,6 +98,7 @@ missing_dates
 test1 <- missing_dates |>
   dplyr::distinct(missing_dates$artist)
 test1
+countof_artist <- nrow(test1)
 ```
 
 ```{r}
@@ -106,13 +107,18 @@ missing_dates_count <- the_tate |>
   summarize(missing_dates = sum(is.na(date)))
 ```
 
+```{r}
+missingyear_counts <- artist_missing_year_counts %>%
+  mutate(percentage = (missing_years / works_with_missing_years) * 100)
+```
+
 How number of works with missing dates is 5397
 
 The number of artists whose works have missing dates is 461 .
 
 It would require resolving missing year data for only \_\_ artists resolve resolve at least 50% of the missing data.
 
-The missing year data likely to be classified as \_\_\_\_.
+The missing year data likely to be classified as MAR.
 
 ### Exercise 3
 
@@ -222,13 +228,13 @@ SPX_Data <- SPX_Data |>
   dplyr::rename(cl="Close.Last")
 
 SPX_Data <- SPX_Data %>%
-  dplyr::mutate(rd = log(lead(cl) / cl))
+  dplyr::mutate(rd = log((cl) / lag(cl)))
+
 
 SPX_Data <- SPX_Data |>
   dplyr::mutate(daily_return_rd=log((cl)/(cl)))
 SPX_Data <- SPX_Data |>
   dplyr::mutate(varience=daily_return_rd^2)
-
 ```
 
 The annual return in the SPX price in 2020 was \_\_\_%.
